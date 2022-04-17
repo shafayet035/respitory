@@ -1,15 +1,31 @@
 import { useState } from "react";
 
 import { Button, Input } from "antd";
-import { LockOutlined, MailOutlined } from "@ant-design/icons";
+import { LockOutlined, MailOutlined, SyncOutlined } from "@ant-design/icons";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 const login = () => {
   const [email, setEmail] = useState("ashchorjo@bakahar.com");
   const [password, setPassword] = useState("biddot.har.ashchorjo!");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
-    console.log("Form Submit");
+    try {
+      console.log("submitting");
+      const response = await axios.post(`/api/login`, {
+        email,
+        password,
+      });
+
+      toast.success(response.data.message);
+      setLoading(false);
+    } catch (error) {
+      toast.error(error.response?.data);
+      setLoading(false);
+    }
   };
 
   return (
@@ -37,8 +53,8 @@ const login = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <Button className="w-100" htmlType="submit" type="primary">
-            Submit
+          <Button className="w-100" htmlType="submit" type="primary" disabled={loading || !email || !password}>
+            {loading ? <SyncOutlined spin /> : "Submit"}
           </Button>
         </form>
       </div>
