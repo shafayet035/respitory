@@ -14,7 +14,13 @@ app.use(morgan());
 app.use(express.json());
 
 // Database
-mongoose.connect(process.env.DATABASE);
+mongoose
+  .connect(process.env.DATABASE, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("Database Connected"))
+  .catch((err) => console.log("DB Connection Error", err));
 
 // routes
 readdirSync("./routes").map((route) => {

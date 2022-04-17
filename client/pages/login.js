@@ -1,30 +1,46 @@
-import React from "react";
-import { Form, Input, Button } from "antd";
+import { useState } from "react";
+
+import { Button, Input } from "antd";
+import { LockOutlined, MailOutlined } from "@ant-design/icons";
 
 const login = () => {
-  const [form] = Form.useForm();
+  const [email, setEmail] = useState("ashchorjo@bakahar.com");
+  const [password, setPassword] = useState("biddot.har.ashchorjo!");
 
-  const handleSubmit = (values) => {
-    console.log(values);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("Form Submit");
   };
 
   return (
     <div className="container col-md-4 py-5">
       <h4 className="mb-5 text-center">Login</h4>
-      <div className="shadow-sm p-4 pb-2 bg-white">
-        <Form form={form} layout="vertical" onFinish={handleSubmit}>
-          <Form.Item label="E-mail Address" required tooltip="This is a required field">
-            <Input required type="email" placeholder="Email" />
-          </Form.Item>
-          <Form.Item label="Password" required tooltip="This is a required field">
-            <Input required type="password" placeholder="Password" />
-          </Form.Item>
-          <Form.Item>
-            <Button htmlType="submit" type="primary">
-              Submit
-            </Button>
-          </Form.Item>
-        </Form>
+      <div className="shadow-sm p-4 bg-white rounded">
+        <form onSubmit={handleSubmit}>
+          <label className="form-label">E-mail Address</label>
+          <Input
+            className="mb-3"
+            size="large"
+            required
+            placeholder="Enter your Email"
+            prefix={<MailOutlined />}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />{" "}
+          <label className="form-label">Passsword</label>
+          <Input.Password
+            className="mb-3"
+            size="large"
+            required
+            placeholder="User password"
+            prefix={<LockOutlined />}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <Button className="w-100" htmlType="submit" type="primary">
+            Submit
+          </Button>
+        </form>
       </div>
     </div>
   );
