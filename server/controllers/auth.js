@@ -71,3 +71,14 @@ export const login = async (req, res) => {
     res.status(400).send("Error");
   }
 };
+
+export const logout = async (req, res) => {
+  try {
+    res.clearCookie("token");
+
+    return res.send("Logged Out!");
+  } catch (error) {
+    confirm.log(error);
+    res.status(400).send("Something Went Wrong!");
+  }
+};

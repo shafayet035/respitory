@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Button, Input } from "antd";
 import { LockOutlined, MailOutlined, UserOutlined, SyncOutlined } from "@ant-design/icons";
@@ -6,12 +6,21 @@ import { LockOutlined, MailOutlined, UserOutlined, SyncOutlined } from "@ant-des
 import axios from "axios";
 import { toast } from "react-toastify";
 import Link from "next/link";
+import { useUser } from "../store";
+import { useRouter } from "next/router";
 
 const register = () => {
   const [userName, setUserName] = useState("Biddot Ashchorjo");
   const [email, setEmail] = useState("ashchorjo@bakahar.com");
   const [password, setPassword] = useState("biddot.har.ashchorjo!");
   const [loading, setLoading] = useState(false);
+
+  const router = useRouter();
+  const user = useUser();
+
+  useEffect(() => {
+    if (user !== null) router.push("/");
+  }, [user]);
 
   const handleSubmit = async (e) => {
     setLoading(true);
@@ -30,6 +39,8 @@ const register = () => {
       setLoading(false);
     }
   };
+
+  if (user) return null;
 
   return (
     <>

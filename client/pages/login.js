@@ -18,8 +18,8 @@ const login = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (user) router.replace("/");
-  }, []);
+    if (user !== null) router.push("/");
+  }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

@@ -5,3 +5,7 @@ body {
 a {
   text-decoration: none !important;
 }
+
+svg {
+  vertical-align: baseline !important;
+}
