@@ -1,4 +1,5 @@
 import User from "../models/user";
+import jwt from "jsonwebtoken";
 
 import { hashPassword, verifyPassword } from "../utils/auth";
 
@@ -49,16 +50,21 @@ export const login = async (req, res) => {
     const user = await User.findOne({ email }).exec();
     if (!user) return res.status(400).send("User email not found");
 
-    console.log(user);
     // Match Password by bcrypt
     const match = await verifyPassword(password, user.password);
     if (!match) return res.status(400).send("Password is incorrect");
 
     // Generate JWT Token
+    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
 
-    return res.json({
-      message: "Logged in Successfully",
+    user.password = undefined;
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      // secure: true, // Only For Https
     });
+
+    return res.json({ user, message: "Successfully Logged in" });
   } catch (error) {
     console.log(error);
 
