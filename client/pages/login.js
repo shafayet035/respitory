@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { useLogin, useUser } from "../store";
 import { useRouter } from "next/router";
+import ProtectedRoute from "../component/ProtectedRoute";
 
 const login = () => {
   const [email, setEmail] = useState("ashchorjo@bakahar.com");
@@ -13,13 +14,8 @@ const login = () => {
   const [loading, setLoading] = useState(false);
 
   const login = useLogin();
-  const user = useUser();
 
   const router = useRouter();
-
-  useEffect(() => {
-    if (user !== null) router.push("/");
-  }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -52,39 +48,39 @@ const login = () => {
     }
   };
 
-  if (user) return null;
-
   return (
-    <div className="container col-md-4 py-5">
-      <h4 className="mb-5 text-center">Login</h4>
-      <div className="shadow-sm p-4 bg-white rounded">
-        <form onSubmit={handleSubmit}>
-          <label className="form-label">E-mail Address</label>
-          <Input
-            className="mb-3"
-            size="large"
-            required
-            placeholder="Enter your Email"
-            prefix={<MailOutlined />}
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />{" "}
-          <label className="form-label">Passsword</label>
-          <Input.Password
-            className="mb-3"
-            size="large"
-            required
-            placeholder="User password"
-            prefix={<LockOutlined />}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <Button className="w-100" htmlType="submit" type="primary" disabled={loading || !email || !password}>
-            {loading ? <SyncOutlined spin /> : "Submit"}
-          </Button>
-        </form>
+    <ProtectedRoute>
+      <div className="container col-md-4 py-5">
+        <h4 className="mb-5 text-center">Login</h4>
+        <div className="shadow-sm p-4 bg-white rounded">
+          <form onSubmit={handleSubmit}>
+            <label className="form-label">E-mail Address</label>
+            <Input
+              className="mb-3"
+              size="large"
+              required
+              placeholder="Enter your Email"
+              prefix={<MailOutlined />}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />{" "}
+            <label className="form-label">Passsword</label>
+            <Input.Password
+              className="mb-3"
+              size="large"
+              required
+              placeholder="User password"
+              prefix={<LockOutlined />}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <Button className="w-100" htmlType="submit" type="primary" disabled={loading || !email || !password}>
+              {loading ? <SyncOutlined spin /> : "Submit"}
+            </Button>
+          </form>
+        </div>
       </div>
-    </div>
+    </ProtectedRoute>
   );
 };
 

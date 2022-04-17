@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import Link from "next/link";
 import { useUser } from "../store";
 import { useRouter } from "next/router";
+import ProtectedRoute from "../component/ProtectedRoute";
 
 const register = () => {
   const [userName, setUserName] = useState("Biddot Ashchorjo");
@@ -16,11 +17,6 @@ const register = () => {
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
-  const user = useUser();
-
-  useEffect(() => {
-    if (user !== null) router.push("/");
-  }, [user]);
 
   const handleSubmit = async (e) => {
     setLoading(true);
@@ -40,10 +36,8 @@ const register = () => {
     }
   };
 
-  if (user) return null;
-
   return (
-    <>
+    <ProtectedRoute>
       <h4 className="mb-3 text-center pt-5">Register An Account</h4>
       <div className="container col-md-4">
         <div className="shadow-sm p-4 bg-white rounded">
@@ -92,7 +86,7 @@ const register = () => {
       <p className="text-center py-3">
         Already an user? <Link href="/login">Login</Link>
       </p>
-    </>
+    </ProtectedRoute>
   );
 };
 
