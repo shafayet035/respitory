@@ -36,6 +36,9 @@ const Header = () => {
       )}
       {user && (
         <SubMenu className="ms-auto" key="SubMenu" icon={<UserOutlined />} title="Profile">
+          <Item key="/user/profile" icon={<LogoutOutlined />}>
+            <Link href="/user/profile">{user.userName}</Link>
+          </Item>
           <Item key="/logout" icon={<LogoutOutlined />} onClick={logOutHandler}>
             Logout
           </Item>

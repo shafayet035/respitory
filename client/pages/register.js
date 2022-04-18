@@ -4,7 +4,7 @@ import { Button, Input } from "antd";
 import { LockOutlined, MailOutlined, UserOutlined, SyncOutlined } from "@ant-design/icons";
 
 import Link from "next/link";
-import ProtectedRoute from "../component/ProtectedRoute";
+import LoggedOutRoute from "../component/LoggedOutRoute";
 import useAuth from "../hooks/useAuth";
 
 const register = () => {
@@ -20,7 +20,7 @@ const register = () => {
   };
 
   return (
-    <ProtectedRoute>
+    <LoggedOutRoute>
       <h4 className="mb-3 text-center pt-5">Register An Account</h4>
       <div className="container col-md-4">
         <div className="shadow-sm p-4 bg-white rounded">
@@ -69,7 +69,7 @@ const register = () => {
       <p className="text-center py-3">
         Already an user? <Link href="/login">Login</Link>
       </p>
-    </ProtectedRoute>
+    </LoggedOutRoute>
   );
 };
 

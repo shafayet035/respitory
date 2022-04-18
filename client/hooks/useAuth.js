@@ -68,22 +68,7 @@ const useAuth = () => {
     setCheck(true);
   };
 
-  const verifyToken = () => {
-    axios.interceptors.response.use(
-      (response) => response,
-      (error) => {
-        const res = error.response;
-        if (res.status === 401 && res.config && !res.config.__isRetryRequest) {
-          return new Promise((resolve, reject) => {
-            logOutHandler();
-          });
-        }
-        return Promise.reject(error.response);
-      }
-    );
-  };
-
-  return { registerHandler, logOutHandler, loginHandler, loading, checkAndSetUser, check, verifyToken };
+  return { registerHandler, logOutHandler, loginHandler, loading, checkAndSetUser, check };
 };
 
 export default useAuth;

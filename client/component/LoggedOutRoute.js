@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useUser } from "../store";
 import { useRouter } from "next/router";
 
-const ProtectedRoute = ({ children }) => {
+const LoggedOutRoute = ({ children }) => {
   const router = useRouter();
   const user = useUser();
 
@@ -15,4 +15,4 @@ const ProtectedRoute = ({ children }) => {
   return <>{children}</>;
 };
 
-export default ProtectedRoute;
+export default LoggedOutRoute;

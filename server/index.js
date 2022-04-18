@@ -3,15 +3,20 @@ import cors from "cors";
 import morgan from "morgan";
 import { readdirSync } from "fs";
 import mongoose from "mongoose";
+var csrf = require("csurf");
+var cookieParser = require("cookie-parser");
 
 require("dotenv").config();
+
+var csrfProtection = csrf({ cookie: true });
 
 const app = express();
 
 // middlewares
+app.use(express.json());
 app.use(cors());
 app.use(morgan());
-app.use(express.json());
+app.use(cookieParser());
 
 // Database
 mongoose
@@ -25,6 +30,12 @@ mongoose
 // routes
 readdirSync("./routes").map((route) => {
   app.use("/v1/api", require(`./routes/${route}`));
+});
+
+app.use(csrfProtection);
+
+app.get("/v1/api/csrf", (req, res) => {
+  res.json({ csrfToken: req.csrfToken() });
 });
 
 app.listen(process.env.PORT || 8000, () => {

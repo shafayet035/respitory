@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button, Input } from "antd";
 import { LockOutlined, MailOutlined, SyncOutlined } from "@ant-design/icons";
 
-import ProtectedRoute from "../component/ProtectedRoute";
+import LoggedOutRoute from "../component/LoggedOutRoute";
 import useAuth from "../hooks/useAuth";
 
 const login = () => {
@@ -18,7 +18,7 @@ const login = () => {
   };
 
   return (
-    <ProtectedRoute>
+    <LoggedOutRoute>
       <div className="container col-md-4 py-5">
         <h4 className="mb-5 text-center">Login</h4>
         <div className="shadow-sm p-4 bg-white rounded">
@@ -49,7 +49,7 @@ const login = () => {
           </form>
         </div>
       </div>
-    </ProtectedRoute>
+    </LoggedOutRoute>
   );
 };
 
