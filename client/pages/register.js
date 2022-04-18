@@ -1,39 +1,22 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { Button, Input } from "antd";
 import { LockOutlined, MailOutlined, UserOutlined, SyncOutlined } from "@ant-design/icons";
 
-import axios from "axios";
-import { toast } from "react-toastify";
 import Link from "next/link";
-import { useUser } from "../store";
-import { useRouter } from "next/router";
 import ProtectedRoute from "../component/ProtectedRoute";
+import useAuth from "../hooks/useAuth";
 
 const register = () => {
   const [userName, setUserName] = useState("Biddot Ashchorjo");
   const [email, setEmail] = useState("ashchorjo@bakahar.com");
   const [password, setPassword] = useState("biddot.har.ashchorjo!");
-  const [loading, setLoading] = useState(false);
 
-  const router = useRouter();
+  const { registerHandler, loading } = useAuth();
 
   const handleSubmit = async (e) => {
-    setLoading(true);
     e.preventDefault();
-    try {
-      const response = await axios.post(`/api/register`, {
-        userName,
-        email,
-        password,
-      });
-
-      toast.success(response.data.message);
-      setLoading(false);
-    } catch (error) {
-      toast.error(error.response.data);
-      setLoading(false);
-    }
+    registerHandler(userName, email, password);
   };
 
   return (

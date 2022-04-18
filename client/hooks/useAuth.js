@@ -1,0 +1,89 @@
+import { useState } from "react";
+import axios from "axios";
+import { useLogout, useLogin } from "../store";
+import { toast } from "react-toastify";
+import { useRouter } from "next/router";
+
+const useAuth = () => {
+  const router = useRouter();
+  const logout = useLogout();
+  const login = useLogin();
+  const [loading, setLoading] = useState(false);
+  const [check, setCheck] = useState(false);
+
+  const registerHandler = async (userName, email, password) => {
+    setLoading(true);
+    try {
+      const response = await axios.post(`/api/register`, {
+        userName,
+        email,
+        password,
+      });
+
+      setLoading(false);
+      return toast.success(response.data.message);
+    } catch (error) {
+      setLoading(false);
+      return toast.error(error.response?.data);
+    }
+  };
+
+  const loginHandler = async (email, password) => {
+    setLoading(true);
+
+    try {
+      const { data } = await axios.post(`/api/login`, {
+        email,
+        password,
+      });
+
+      toast.success(data.message);
+
+      login(data.user);
+
+      window.localStorage.setItem("user", JSON.stringify(data.user));
+
+      setLoading(false);
+
+      return router.push("/");
+    } catch (error) {
+      setLoading(false);
+      console.log(error.response);
+      return toast.error(error.response?.data);
+    }
+  };
+
+  const logOutHandler = async () => {
+    logout();
+    window.localStorage.removeItem("user");
+    const { data } = await axios.post("/api/logout");
+    router.push("/login");
+    toast(data);
+  };
+
+  const checkAndSetUser = async () => {
+    setCheck(false);
+    const localUser = await JSON.parse(window.localStorage.getItem("user"));
+    await login(localUser);
+    setCheck(true);
+  };
+
+  const verifyToken = () => {
+    axios.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        const res = error.response;
+        if (res.status === 401 && res.config && !res.config.__isRetryRequest) {
+          return new Promise((resolve, reject) => {
+            logOutHandler();
+          });
+        }
+        return Promise.reject(error.response);
+      }
+    );
+  };
+
+  return { registerHandler, logOutHandler, loginHandler, loading, checkAndSetUser, check, verifyToken };
+};
+
+export default useAuth;

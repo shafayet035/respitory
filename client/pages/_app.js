@@ -5,32 +5,23 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useEffect, useState } from "react";
-import { useLogin, useUser } from "../store";
+import { useEffect } from "react";
 import { SyncOutlined } from "@ant-design/icons";
+import useAuth from "../hooks/useAuth";
 
 function MyApp({ Component, pageProps }) {
-  const [loading, setLoading] = useState(false);
+  const { check, checkAndSetUser, verifyToken } = useAuth();
 
-  const login = useLogin();
-  const user = useUser();
+  verifyToken();
 
   useEffect(() => {
-    console.log("I am Running on _app");
-    gettingUser();
+    checkAndSetUser();
   }, []);
-
-  const gettingUser = () => {
-    setLoading(true);
-    const localUser = JSON.parse(window.localStorage.getItem("user"));
-    login(localUser);
-    setLoading(false);
-  };
 
   return (
     <>
-      {loading ? (
-        <SyncOutlined spin size="large" />
+      {!check ? (
+        <SyncOutlined spin className="w-100 text-center display-1 p-5" />
       ) : (
         <>
           <Header />

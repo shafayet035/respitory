@@ -1,51 +1,20 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { Button, Input } from "antd";
 import { LockOutlined, MailOutlined, SyncOutlined } from "@ant-design/icons";
-import { toast } from "react-toastify";
-import axios from "axios";
-import { useLogin, useUser } from "../store";
-import { useRouter } from "next/router";
+
 import ProtectedRoute from "../component/ProtectedRoute";
+import useAuth from "../hooks/useAuth";
 
 const login = () => {
   const [email, setEmail] = useState("ashchorjo@bakahar.com");
   const [password, setPassword] = useState("biddot.har.ashchorjo!");
-  const [loading, setLoading] = useState(false);
 
-  const login = useLogin();
-
-  const router = useRouter();
+  const { loginHandler, loading } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    setLoading(true);
-
-    try {
-      // requesting api
-      const { data } = await axios.post(`/api/login`, {
-        email,
-        password,
-      });
-
-      // Showing Toast on Success
-      toast.success(data.message);
-
-      // Setting User Data to Store
-      login(data.user);
-
-      // Setting user to localstorage
-      window.localStorage.setItem("user", JSON.stringify(data.user));
-
-      setLoading(false);
-
-      router.push("/");
-    } catch (error) {
-      // Toast Error Message
-      toast.error(error.response.data);
-      setLoading(false);
-    }
+    loginHandler(email, password);
   };
 
   return (
