@@ -1,9 +1,9 @@
 import epxress from "express";
-import { currentUser } from "../controllers/user";
+import { sendPasswordCode } from "../controllers/email";
 import { verifyToken } from "../middlewares";
 
 const router = epxress.Router();
 
-router.get("/current-user", verifyToken, currentUser);
+router.get("/forgot-password", verifyToken, sendPasswordCode);
 
 module.exports = router;

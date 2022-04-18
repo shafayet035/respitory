@@ -19,11 +19,12 @@ const useAuth = () => {
         email,
         password,
       });
-
+      console.log(response.data);
       setLoading(false);
       return toast.success(response.data.message);
     } catch (error) {
       setLoading(false);
+      console.log(error.response);
       return toast.error(error.response?.data);
     }
   };

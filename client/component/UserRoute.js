@@ -1,9 +1,12 @@
 import axios from "axios";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import { useUser } from "../store";
 
 const UserRoute = ({ children }) => {
   const [isAuthorized, setIsAuthorized] = useState(false);
+
+  const user = useUser();
 
   const router = useRouter();
 
@@ -22,7 +25,11 @@ const UserRoute = ({ children }) => {
   };
 
   useEffect(() => {
-    getUser();
+    if (!user) {
+      router.push("/login");
+    } else {
+      getUser();
+    }
   }, []);
 
   if (!isAuthorized) return "";

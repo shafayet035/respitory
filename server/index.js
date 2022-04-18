@@ -3,8 +3,8 @@ import cors from "cors";
 import morgan from "morgan";
 import { readdirSync } from "fs";
 import mongoose from "mongoose";
-var csrf = require("csurf");
-var cookieParser = require("cookie-parser");
+const csrf = require("csurf");
+const cookieParser = require("cookie-parser");
 
 require("dotenv").config();
 
