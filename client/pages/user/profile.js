@@ -5,7 +5,12 @@ import UserRoute from "../../component/UserRoute";
 const Profile = () => {
   const user = useUser();
 
-  return <UserRoute>{/* <div>{user.userName}</div> */}</UserRoute>;
+  return (
+    <UserRoute>
+      <h2>Profile</h2>
+      <div>{user?.userName}</div>
+    </UserRoute>
+  );
 };
 
 export default Profile;

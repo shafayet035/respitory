@@ -25,7 +25,7 @@ function MyApp({ Component, pageProps }) {
         <>
           <Header />
           <Component {...pageProps} />
-          <ToastContainer />
+          <ToastContainer position="bottom-right" />
         </>
       )}
     </AppProvider>

@@ -17,7 +17,7 @@ const AppProvider = ({ children }) => {
       const res = error.response;
       if (res.status === 401 && res.config && !res.config.__isRetryRequest) {
         return new Promise((resolve, reject) => {
-          logOutHandler();
+          logOutHandler("Unauthorized User");
         });
       }
       return Promise.reject(error.response);

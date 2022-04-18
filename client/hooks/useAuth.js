@@ -53,12 +53,17 @@ const useAuth = () => {
     }
   };
 
-  const logOutHandler = async () => {
-    logout();
+  const logOutHandler = async (message = null) => {
+    router.push("/login");
     window.localStorage.removeItem("user");
     const { data } = await axios.post("/api/logout");
-    router.push("/login");
-    toast(data);
+
+    if (message === null) {
+      toast(data);
+    } else {
+      toast(message);
+    }
+    logout();
   };
 
   const checkAndSetUser = async () => {

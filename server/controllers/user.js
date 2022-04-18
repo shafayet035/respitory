@@ -4,9 +4,8 @@ export const currentUser = async (req, res) => {
   try {
     const userId = req.user._id;
     const user = await User.findById(userId).select("-password").exec();
-    if (!user) return res.json({ isAuthorized: false });
-    return res.json({ isAuthorized: true });
+    return res.json({ isAuthorized: true, user });
   } catch (error) {
-    if (error) return res.status(400).send("Unathorized User");
+    return res.json({ isAuthorized: false });
   }
 };

@@ -39,7 +39,7 @@ const Header = () => {
           <Item key="/user/profile" icon={<LogoutOutlined />}>
             <Link href="/user/profile">{user.userName}</Link>
           </Item>
-          <Item key="/logout" icon={<LogoutOutlined />} onClick={logOutHandler}>
+          <Item key="/logout" icon={<LogoutOutlined />} onClick={() => logOutHandler()}>
             Logout
           </Item>
         </SubMenu>

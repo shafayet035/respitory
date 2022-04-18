@@ -7,19 +7,27 @@ const UserRoute = ({ children }) => {
 
   const router = useRouter();
 
+  const getUser = async () => {
+    try {
+      const { data } = await axios.get("/api/current-user");
+
+      if (data.isAuthorized === false) return router.push("/login");
+
+      return setIsAuthorized(true);
+    } catch (error) {
+      if (error) {
+        console.log(error.reponse);
+      }
+    }
+  };
+
   useEffect(() => {
-    setIsAuthorized(true);
-    axios
-      .get("/api/current-user")
-      .then(({ data }) => {
-        console.log(data);
-        if (!data.isAuthorized) router.push("/login");
-        setIsAuthorized(data.isAuthorized);
-      })
-      .catch((err) => console.log(err.response));
+    getUser();
   }, []);
 
-  return <>{isAuthorized ? <>{children}</> : ""}</>;
+  if (!isAuthorized) return "";
+
+  return <> {children} </>;
 };
 
 export default UserRoute;
