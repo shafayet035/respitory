@@ -14,7 +14,7 @@ export const register = async (req, res) => {
 
     // Checking if USer Exists and handling Error
     const isUserExist = await User.findOne({ email }).exec();
-    if (isUserExist) return res.status(400).send("Email is already is in use");
+    if (isUserExist) return res.status(409).send("Email is already is in use");
 
     // Hashing Password using hasPassword utils Function
     const hashedPassword = await hashPassword(password);

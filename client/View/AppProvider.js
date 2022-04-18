@@ -12,15 +12,17 @@ const AppProvider = ({ children }) => {
   };
 
   axios.interceptors.response.use(
-    (response) => response,
+    (response) => {
+      return response;
+    },
     (error) => {
       const res = error.response;
-      if (res.status === 401 && res.config && !res.config.__isRetryRequest) {
+      if (res?.status === 401 && res?.config && !res?.config.__isRetryRequest) {
         return new Promise((resolve, reject) => {
           logOutHandler();
         });
       }
-      return Promise.reject(error.response);
+      return Promise.reject(error);
     }
   );
 

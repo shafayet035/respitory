@@ -14,18 +14,18 @@ const useAuth = () => {
   const registerHandler = async (userName, email, password) => {
     setLoading(true);
     try {
-      const response = await axios.post(`/api/register`, {
+      const { data, status } = await axios.post(`/api/register`, {
         userName,
         email,
         password,
       });
-      console.log(response.data);
+      console.log(status);
+      toast.success(data.message);
       setLoading(false);
-      return toast.success(response.data.message);
     } catch (error) {
+      console.log(error?.response?.data);
+      toast.error(error?.response?.data);
       setLoading(false);
-      console.log(error.response);
-      return toast.error(error.response?.data);
     }
   };
 
