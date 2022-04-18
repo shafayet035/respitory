@@ -54,16 +54,13 @@ const useAuth = () => {
     }
   };
 
-  const logOutHandler = async (message = null) => {
+  const logOutHandler = async () => {
     router.push("/login");
     window.localStorage.removeItem("user");
     const { data } = await axios.post("/api/logout");
 
-    if (message === null) {
-      toast(data);
-    } else {
-      toast(message);
-    }
+    toast(data);
+
     logout();
   };
 
