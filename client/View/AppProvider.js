@@ -8,6 +8,7 @@ const AppProvider = ({ children }) => {
 
   const getCsrfToken = async () => {
     const { data } = await axios.get("/api/csrf");
+    console.log(data);
     axios.defaults.headers["X-CSRF-TOKEN"] = data.csrfToken;
   };
 

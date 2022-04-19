@@ -1,7 +1,9 @@
 import User from "../models/user";
 import jwt from "jsonwebtoken";
+import { nanoid } from "nanoid";
 
 import { hashPassword, verifyPassword } from "../utils/auth";
+import { sendPasswordCode } from "../utils/email";
 
 export const register = async (req, res) => {
   try {
@@ -80,5 +82,56 @@ export const logout = async (req, res) => {
   } catch (error) {
     confirm.log(error);
     res.status(400).send("Something Went Wrong!");
+  }
+};
+
+export const forgotPassword = async (req, res) => {
+  const email = req.body.email;
+  console.log(email);
+  const code = nanoid(5).toLocaleUpperCase();
+
+  try {
+    const user = await User.findOneAndUpdate({ email }, { password_reset_code: code }).exec();
+
+    if (!user) return res.status(404).send("Email doesn't Exists");
+
+    sendPasswordCode(code, email)
+      .then((response) => {
+        if (response.ok) return res.json({ message: "Please Check Your Email Address for 5 Character Code" });
+      })
+      .catch((err) => {
+        console.log(err);
+        return res.status(400).send("Please Try Again!");
+      });
+  } catch (error) {
+    return res.status(400).send("Something Went Wrong!");
+  }
+};
+
+export const resetPassword = async (req, res) => {
+  const email = req.body.email;
+  const password = req.body.password;
+  const code = req.body.code;
+
+  if (!code) return res.status(400).send("Please enter your code");
+
+  if (!password || password.length < 6) return res.status(400).send("Password must be at least 6 characters long");
+
+  const hashedPassword = await hashPassword(password);
+
+  try {
+    const user = await User.findOneAndUpdate(
+      { email, password_reset_code: code },
+      { password: hashedPassword, password_reset_code: "" }
+    ).exec();
+
+    if (!user) return res.status(404).send("Invalid Code or Email Address!");
+
+    return res.json({
+      message: "Password Changed Successfully!",
+    });
+  } catch (error) {
+    console.log(error.response);
+    res.send(400).send("Try again Later or Contact us");
   }
 };

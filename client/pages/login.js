@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import { Button, Input } from "antd";
 import { LockOutlined, MailOutlined, SyncOutlined } from "@ant-design/icons";
+import Link from "next/link";
 
 import LoggedOutRoute from "../component/LoggedOutRoute";
 import useAuth from "../hooks/useAuth";
@@ -48,6 +49,9 @@ const login = () => {
             </Button>
           </form>
         </div>
+        <p className="mt-4">
+          Forgot Your Password? <Link href="/password-reset">Reset Your Password</Link>
+        </p>
       </div>
     </LoggedOutRoute>
   );
