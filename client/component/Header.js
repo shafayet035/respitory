@@ -34,6 +34,16 @@ const Header = () => {
           </Item>
         </>
       )}
+      {user && user.role.includes("instructor") && (
+        <Item key="/create-course" icon={<UserAddOutlined />}>
+          <Link href="/create-course">Create Course</Link>
+        </Item>
+      )}
+      {user && !user.role.includes("instructor") && (
+        <Item key="/become-instructor" icon={<UserAddOutlined />}>
+          <Link href="/become-instructor">Become Instructor</Link>
+        </Item>
+      )}
       {user && (
         <SubMenu className="ms-auto" key="SubMenu" icon={<UserOutlined />} title="Profile">
           <Item key="/user/profile" icon={<LogoutOutlined />}>
