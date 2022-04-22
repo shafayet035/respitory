@@ -2,25 +2,41 @@ import { Button, Input, Select } from "antd";
 import axios from "axios";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
-import { useUser } from "../store";
+import { useLogin, useUser } from "../store";
 
 const BecomeInstructor = () => {
   const [loading, setLoading] = useState(false);
+  const login = useLogin();
+
+  const [formData, setFormData] = useState({
+    contact_number: "",
+    billing_address: "",
+    payment_gateway: "",
+    topic: "",
+  });
 
   const user = useUser();
 
-  const instructorHandler = async () => {
+  const instructorHandler = async (e) => {
+    e.preventDefault();
     setLoading(true);
 
     try {
-      const { data } = await axios.post("/api/create-instructor");
-
+      const { data } = await axios.post("/api/create-instructor", { formData });
+      toast.success(data.message);
+      login(data.user);
       setLoading(false);
+      window.location.href = "/user/profile";
     } catch (error) {
-      console.log(error.response);
-      toast.error(error.response?.statusText);
+      toast.error(error.response?.data);
       setLoading(false);
     }
+  };
+
+  const onChangeInput = (name, value) => {
+    const oldData = { ...formData, [name]: value };
+
+    setFormData(oldData);
   };
 
   return (
@@ -28,37 +44,58 @@ const BecomeInstructor = () => {
       <div className="container">
         <div className="row align-items-center">
           <div className="col-md-6">
-            <h2 className="display-4">Become an Instructor Today!</h2>
-            <p className="lead">
+            <h2 className="display-4 ">Become an Instructor Today!</h2>
+            <p className="lead mb-4">
               Add a Billing Information to Receive Payment and the Following information to be an Instructor
             </p>
-            <form>
+            <form onSubmit={instructorHandler}>
               <div className="mb-3">
                 <label className="form-label">Contact Number</label>
-                <Input size="large" required name="contact_number" placeholder="Billing Contact Number" />
+                <Input
+                  onChange={(e) => onChangeInput(e.target.name, e.target.value)}
+                  type="number"
+                  size="large"
+                  name="contact_number"
+                  placeholder="Billing Contact Number"
+                />
               </div>
               <div className="mb-3">
                 <label className="form-label">Billing Address</label>
-                <Input size="large" required name="billing_address" placeholder="Billing Address" />
+                <Input
+                  onChange={(e) => onChangeInput(e.target.name, e.target.value)}
+                  size="large"
+                  name="billing_address"
+                  placeholder="Billing Address"
+                />
               </div>
               <div className="mb-3">
                 <label className="form-label">Payment Gateway</label>
-                <Select placeholder="Your Profession" className="w-100">
+                <Select
+                  onChange={(value) => onChangeInput("payment_gateway", value)}
+                  placeholder="Your Profession"
+                  name="payment_gateway"
+                  className="w-100"
+                >
                   <Select.Option value="Paypal">Paypal</Select.Option>
                   <Select.Option value="Payoneer">Payoneer</Select.Option>
                   <Select.Option value="Direct to Bank">Direct to Bank</Select.Option>
                 </Select>
               </div>
               <div className="mb-3">
-                <label className="form-label">Your Profession</label>
-                <Select placeholder="Your Profession" className="w-100">
-                  <Select.Option value="Backend Developer">Backend Developer</Select.Option>
-                  <Select.Option value="Frontend Developer">Frontend Developer</Select.Option>
-                  <Select.Option value="Human Resources">Human Resources</Select.Option>
-                  <Select.Option value="Blockchain Developer">Blockchain Developer</Select.Option>
+                <label className="form-label">What you will teach?</label>
+                <Select
+                  onChange={(value) => onChangeInput("topic", value)}
+                  placeholder="In Which Topic you will teach"
+                  name="profession"
+                  className="w-100"
+                >
+                  <Select.Option value="Backend Developer">Backend Development</Select.Option>
+                  <Select.Option value="Frontend Developer">Frontend Development</Select.Option>
+                  <Select.Option value="Blockchain Developer">Blockchain Technology</Select.Option>
+                  <Select.Option value="Human Resources">Digital Marketing</Select.Option>
                 </Select>
               </div>
-              <Button onClick={instructorHandler} disabled={loading || !user} type="primary" size="large">
+              <Button htmlType="submit" disabled={loading || !user} type="primary" size="large">
                 Setup Payment
               </Button>
             </form>

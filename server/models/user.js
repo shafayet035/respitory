@@ -30,6 +30,7 @@ const userSchema = new Schema(
       default: ["subscriber"],
       enum: ["subscriber", "instructor", "admin"],
     },
+    billing_details: {},
     stripe_acc_id: "",
     stripe_seller: {},
     stripe_session: {},

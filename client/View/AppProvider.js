@@ -2,9 +2,14 @@ import { useEffect } from "react";
 
 import axios from "axios";
 import useAuth from "../hooks/useAuth";
+import { useUser } from "../store";
 
 const AppProvider = ({ children }) => {
   const { logOutHandler } = useAuth();
+
+  const user = useUser();
+
+  console.log(user);
 
   const getCsrfToken = async () => {
     const { data } = await axios.get("/api/csrf");

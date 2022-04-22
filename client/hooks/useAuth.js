@@ -42,8 +42,6 @@ const useAuth = () => {
 
       login(data.user);
 
-      window.localStorage.setItem("user", JSON.stringify(data.user));
-
       setLoading(false);
 
       return router.push("/");
