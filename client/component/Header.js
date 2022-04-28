@@ -24,6 +24,7 @@ const Header = () => {
       <Item key="/" icon={<HomeOutlined />}>
         <Link href="/">Home</Link>
       </Item>
+
       {!user && (
         <>
           <Item key="/register" icon={<UserAddOutlined />}>
@@ -35,8 +36,8 @@ const Header = () => {
         </>
       )}
       {user && user.role.includes("instructor") && (
-        <Item key="/create-course" icon={<UserAddOutlined />}>
-          <Link href="/create-course">Create Course</Link>
+        <Item key="/instructor/course/create" icon={<UserAddOutlined />}>
+          <Link href="/instructor/course/create">Create Course</Link>
         </Item>
       )}
       {user && !user.role.includes("instructor") && (
